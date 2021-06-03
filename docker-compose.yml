@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  smartbuilding:
+    image: ${DOCKER_REGISTRY-}smartbuilding
+    build:
+      context: .
+      dockerfile: SmartBuilding/Dockerfile
