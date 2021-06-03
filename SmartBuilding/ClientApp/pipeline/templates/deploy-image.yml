@@ -1,0 +1,39 @@
+parameters:
+- name: name
+  type: string
+- name: environment
+  type: string
+- name: variablesGroup
+  type: string
+
+stages:
+- stage: deploy${{parameters.environment}}
+  displayName: ${{parameters.name}}
+  dependsOn: Build
+  condition: succeeded()
+  variables:
+  - group: ${{parameters.variablesGroup}}
+  jobs:
+  - deployment: deploy${{parameters.environment}}
+    displayName: 🚀 Deploy ${{parameters.environment}} environment
+    pool:
+      vmImage: ubuntu-latest
+    environment: ${{parameters.environment}}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: '📩 Download Build Artifacts'
+            inputs:
+                buildType: "current"
+                downloadType: "single"
+                artifactName: "WebApp"
+                downloadPath: "$(System.ArtifactsDirectory)"
+          - task: AzureWebApp@1
+            displayName: '🚀 Deploy to App Service'
+            inputs:
+                azureSubscription: '$(SERVICE-CONNECTION)'
+                appName: '$(APP-SERVICE-WEB)'
+                appType: 'webApp'
+                package: '$(System.ArtifactsDirectory)/WebApp/$(Build.BuildNumber).zip'
