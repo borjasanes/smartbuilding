@@ -6,7 +6,7 @@ import {
     Spinner,
     SpinnerOverlay
 } from 'modules/app/shared';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { rem } from 'styles/utils/sizes';
 import { Hvac } from 'modules/app/models';
 import { DonutChart } from 'modules/app/shared/donut-chart/donut-chart';
