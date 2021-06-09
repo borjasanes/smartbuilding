@@ -6,10 +6,19 @@ import {
     Spinner,
     SpinnerOverlay
 } from 'modules/app/shared';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { rem } from 'styles/utils/sizes';
-import { ReactComponent as HVAC01 } from 'assets/img/hvac-01.svg';
-import { ReactComponent as HVAC02 } from 'assets/img/hvac-02.svg';
+import { Hvac } from 'modules/app/models';
+import { DonutChart } from 'modules/app/shared/donut-chart/donut-chart';
+import { DataLabelLabel } from 'modules/app/shared/data-label/data-label-label';
+
+const DonutGraphWrapper = styled.div`
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+`;
 
 const ContentWrapper = styled.div`
     display: flex;
@@ -77,20 +86,69 @@ const GraphLoadingWrapper = styled.div`
 `;
 
 const HvacCard = () => {
-    const [isShowData, setShowData] = useState<boolean>();
+    const [hvac, setItems] = useState<Hvac>();
+
+    const fetchData = async () => {
+        const result = await fetch('api/hvac');
+        if (result.status === 200) {
+            setItems(await result.json());
+        }
+    };
 
     return (
         <FeaturedCard title='HVAC system' icon='hvac'>
-            {isShowData ? (
+            {hvac ? (
                 <ContentWrapper>
                     <GridTemplate columns={2} gap={32}>
                         <GraphLoadingWrapper>
                             <Spinner isSmall />
-                            <HVAC01 />
+                            <DonutGraphWrapper>
+                                <DonutChart
+                                    size={85}
+                                    itemCircleWidth={15}
+                                    showTotal={true}
+                                    showLegend={false}
+                                    items={[
+                                        {
+                                            color: '#27A574',
+                                            percentage:
+                                                hvac?.nextMaintenanceDays || 0,
+                                            title: 'days'
+                                        }
+                                    ]}
+                                    total={hvac?.maintenancePeriodDays}
+                                />
+                                <DataLabelLabel>
+                                    {hvac?.maintenancePeriodDays} days
+                                </DataLabelLabel>
+                                <DataLabelLabel>
+                                    Next maintenance
+                                </DataLabelLabel>
+                            </DonutGraphWrapper>
                         </GraphLoadingWrapper>
                         <GraphLoadingWrapper>
                             <Spinner isSmall />
-                            <HVAC02 />
+                            <DonutGraphWrapper>
+                                <DonutChart
+                                    size={85}
+                                    itemCircleWidth={15}
+                                    showTotal={true}
+                                    showLegend={false}
+                                    items={[
+                                        {
+                                            color: '#6e73ee',
+                                            percentage:
+                                                hvac?.projectedLifeYears || 0,
+                                            title: 'years'
+                                        }
+                                    ]}
+                                    total={hvac?.projectedLifePeriodYears}
+                                />
+                                <DataLabelLabel>
+                                    {hvac?.projectedLifePeriodYears} years
+                                </DataLabelLabel>
+                                <DataLabelLabel>Projected life</DataLabelLabel>
+                            </DonutGraphWrapper>
                         </GraphLoadingWrapper>
                     </GridTemplate>
                 </ContentWrapper>
@@ -101,7 +159,7 @@ const HvacCard = () => {
                         <Button
                             label='Refresh'
                             iconName='refresh'
-                            onClick={() => setShowData(!isShowData)}
+                            onClick={() => fetchData()}
                         />
                     </ButtonWrapper>
                 </ContentWrapper>

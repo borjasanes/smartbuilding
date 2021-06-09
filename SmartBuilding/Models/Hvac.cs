@@ -10,6 +10,8 @@ namespace SmartBuilding.Models
         public Guid Id { get; set; }
         public DateTime DateTime { get; set; } = DateTime.UtcNow;
         public int NextMaintenanceDays { get; set; }
+        public int MaintenancePeriodDays { get; set; }
         public int ProjectedLifeYears { get; set; }
+        public int ProjectedLifePeriodYears { get; set; }
     }
 }

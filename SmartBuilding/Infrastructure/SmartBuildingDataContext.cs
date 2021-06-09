@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using SmartBuilding.Models;
 
 namespace SmartBuilding.Infrastructure
@@ -12,4 +13,5 @@ namespace SmartBuilding.Infrastructure
 
         public DbSet<Hvac> Hvac { get; set; }
     }
+
 }

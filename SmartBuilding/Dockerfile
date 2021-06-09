@@ -5,8 +5,8 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-RUN set -eux & apk add --no-cache nodejs yarn
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+RUN apk add --no-cache nodejs yarn
 WORKDIR /src
 COPY ["SmartBuilding/SmartBuilding.csproj", "SmartBuilding/"]
 RUN dotnet restore "SmartBuilding/SmartBuilding.csproj"

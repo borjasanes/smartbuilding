@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartBuilding.Infrastructure;
 
 namespace SmartBuilding.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartBuildingDataContext))]
-    partial class SmartBuildingDataContextModelSnapshot : ModelSnapshot
+    [Migration("20210608180435_PeriodLimits")]
+    partial class PeriodLimits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,6 +45,17 @@ namespace SmartBuilding.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hvac");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b2616ff7-d0d2-44d1-a706-acb0d2ba473d"),
+                            DateTime = new DateTime(2021, 6, 8, 18, 4, 35, 431, DateTimeKind.Utc).AddTicks(5503),
+                            MaintenancePeriodDays = 120,
+                            NextMaintenanceDays = 60,
+                            ProjectedLifePeriodYears = 48,
+                            ProjectedLifeYears = 8
+                        });
                 });
 #pragma warning restore 612, 618
         }
